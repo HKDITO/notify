@@ -122,20 +122,17 @@ function scheduleNotifications(events) {
   events.forEach(event => {
     const eventTime = moment.tz(event.start.dateTime, event.start.timeZone || 'UTC').tz('Asia/Tokyo').valueOf();
     const now = moment().valueOf();
-    const delay = 0 // 10分前に通知
-    console.log(`Scheduling notification for event: ${event.subject}, Delay: ${delay}ms`);
+    const delay = eventTime - now - (10 * 60 * 1000); // 10分前に通知
 
     if (delay > 0) {
       setTimeout(() => sendNotification(event), delay);
-    } else {
-      console.log(`Skipping notification for event: ${event.subject}, Delay: ${delay}ms`);
     }
   });
 }
 
 function sendNotification(event) {
   const notificationOptions = {
-    body: `イベント: ${event.subject}\n開始時間: ${moment.tz(event.start.dateTime, event.start.timeZone || 'UTC').tz('Asia/Tokyo').format('YYYY/MM/DD HH:mm')}`,
+    body: `イベント: ${event.subject}`,
     icon: 'icon.png'
   };
   new Notification('予定表の通知', notificationOptions);
@@ -150,7 +147,21 @@ function requestNotificationPermission() {
         console.log('Notification permission denied.');
       }
     });
+  } else {
+    console.log('This browser does not support notifications.');
   }
 }
 
+// 初期ロード時に通知権限をリクエスト
 requestNotificationPermission();
+
+// テスト通知のスケジュール
+if (Notification.permission === 'granted') {
+  scheduleTestNotification();
+}
+
+function scheduleTestNotification() {
+  setTimeout(() => {
+    sendNotification({ subject: 'テスト通知' });
+  }, 5000); // 5秒後に通知
+}
