@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outlook Calendar Notifications</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icon.png">
-  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.34/builds/moment-timezone-with-data.min.js"></script>
-  <script src="app.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outlook Calendar Notifications</title>
 </head>
 <body>
-  <h1>Outlook Calendar Notifications</h1>
-  <button onclick="getAuthToken()">サインインして予定表を取得</button>
-  <h2>取得したイベント</h2>
-  <ul id="eventList"></ul>
+    <h1>Outlook Calendar Notifications</h1>
+    <button onclick="getAuthToken()">サインインして予定表を取得</button>
+    <h2>本日の予定</h2>
+    <ul id="todayEventList"></ul>
+    <h2>1週間以内の予定</h2>
+    <ul id="weekEventList"></ul>
+    <h2>1か月以内の予定</h2>
+    <ul id="monthEventList"></ul>
+    <h2>それ以降の予定</h2>
+    <ul id="futureEventList"></ul>
+    <script src="script.js"></script>
 </body>
 </html>
