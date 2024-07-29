@@ -53,23 +53,66 @@ function getCalendarEvents(token) {
 }
 
 function displayEvents(events) {
-  const eventList = document.getElementById('eventList');
-  eventList.innerHTML = ''; // 既存のイベントをクリア
+  const now = moment();
+  const todayEventList = document.getElementById('todayEventList');
+  const weekEventList = document.getElementById('weekEventList');
+  const monthEventList = document.getElementById('monthEventList');
+  const futureEventList = document.getElementById('futureEventList');
+
+  const today = [];
+  const thisWeek = [];
+  const thisMonth = [];
+  const future = [];
+
   events.forEach(event => {
-    const listItem = document.createElement('li');
     const start = moment.tz(event.start.dateTime, event.start.timeZone || 'UTC').tz('Asia/Tokyo');
     const end = moment.tz(event.end.dateTime, event.end.timeZone || 'UTC').tz('Asia/Tokyo');
     
-    const formattedDate = start.format('YYYY/MM/DD');
-    const formattedStartTime = start.format('HH:mm');
-    const formattedEndTime = end.format('HH:mm');
+    if (end.isBefore(now)) {
+      return; // 現在以前の予定を非表示にする
+    }
 
     const organizer = event.organizer && event.organizer.emailAddress ? event.organizer.emailAddress.name : 'Unknown';
+    const formattedEvent = `${event.subject} ${start.format('YYYY/MM/DD')} ${start.format('HH:mm')} - ${end.format('HH:mm')} ${organizer}`;
     
-    const formattedEvent = `${event.subject} ${formattedDate} ${formattedStartTime} - ${formattedEndTime} ${organizer}`;
-    
-    listItem.textContent = formattedEvent;
-    eventList.appendChild(listItem);
+    if (start.isSame(now, 'day')) {
+      today.push(formattedEvent);
+    } else if (start.isBefore(now.clone().add(1, 'week'))) {
+      thisWeek.push(formattedEvent);
+    } else if (start.isBefore(now.clone().add(1, 'month'))) {
+      thisMonth.push(formattedEvent);
+    } else {
+      future.push(formattedEvent);
+    }
+  });
+
+  today.sort((a, b) => moment(a.split(' ')[1] + ' ' + a.split(' ')[2], 'YYYY/MM/DD HH:mm') - moment(b.split(' ')[1] + ' ' + b.split(' ')[2], 'YYYY/MM/DD HH:mm'));
+  thisWeek.sort((a, b) => moment(a.split(' ')[1] + ' ' + a.split(' ')[2], 'YYYY/MM/DD HH:mm') - moment(b.split(' ')[1] + ' ' + b.split(' ')[2], 'YYYY/MM/DD HH:mm'));
+  thisMonth.sort((a, b) => moment(a.split(' ')[1] + ' ' + a.split(' ')[2], 'YYYY/MM/DD HH:mm') - moment(b.split(' ')[1] + ' ' + b.split(' ')[2], 'YYYY/MM/DD HH:mm'));
+  future.sort((a, b) => moment(a.split(' ')[1] + ' ' + a.split(' ')[2], 'YYYY/MM/DD HH:mm') - moment(b.split(' ')[1] + ' ' + b.split(' ')[2], 'YYYY/MM/DD HH:mm'));
+
+  today.forEach(event => {
+    const listItem = document.createElement('li');
+    listItem.textContent = event;
+    todayEventList.appendChild(listItem);
+  });
+
+  thisWeek.forEach(event => {
+    const listItem = document.createElement('li');
+    listItem.textContent = event;
+    weekEventList.appendChild(listItem);
+  });
+
+  thisMonth.forEach(event => {
+    const listItem = document.createElement('li');
+    listItem.textContent = event;
+    monthEventList.appendChild(listItem);
+  });
+
+  future.forEach(event => {
+    const listItem = document.createElement('li');
+    listItem.textContent = event;
+    futureEventList.appendChild(listItem);
   });
 }
 
@@ -93,14 +136,4 @@ function sendNotification(event) {
   new Notification('予定表の通知', notificationOptions);
 }
 
-function requestNotificationPermission() {
-  if ('Notification' in window) {
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-      }
-    });
-  }
-}
-
-requestNotificationPermission();
+function request
