@@ -132,7 +132,7 @@ function scheduleNotifications(events) {
 
 function sendNotification(event) {
   const notificationOptions = {
-    body: `イベント: ${event.subject}`,
+    body: `イベント: ${event.subject}\n開始時間: ${moment.tz(event.start.dateTime, event.start.timeZone || 'UTC').tz('Asia/Tokyo').format('YYYY/MM/DD HH:mm')}`,
     icon: 'icon.png'
   };
   new Notification('予定表の通知', notificationOptions);
