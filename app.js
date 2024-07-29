@@ -76,42 +76,44 @@ function displayEvents(events) {
     const formattedEvent = `${event.subject} ${start.format('YYYY/MM/DD')} ${start.format('HH:mm')} - ${end.format('HH:mm')} ${organizer}`;
     
     if (start.isSame(now, 'day')) {
-      today.push(formattedEvent);
+      today.push({event: formattedEvent, time: start});
     } else if (start.isBefore(now.clone().add(1, 'week'))) {
-      thisWeek.push(formattedEvent);
+      thisWeek.push({event: formattedEvent, time: start});
     } else if (start.isBefore(now.clone().add(1, 'month'))) {
-      thisMonth.push(formattedEvent);
+      thisMonth.push({event: formattedEvent, time: start});
     } else {
-      future.push(formattedEvent);
+      future.push({event: formattedEvent, time: start});
     }
   });
 
-  today.sort((a, b) => moment(a.split(' ')[1] + ' ' + a.split(' ')[2], 'YYYY/MM/DD HH:mm') - moment(b.split(' ')[1] + ' ' + b.split(' ')[2], 'YYYY/MM/DD HH:mm'));
-  thisWeek.sort((a, b) => moment(a.split(' ')[1] + ' ' + a.split(' ')[2], 'YYYY/MM/DD HH:mm') - moment(b.split(' ')[1] + ' ' + b.split(' ')[2], 'YYYY/MM/DD HH:mm'));
-  thisMonth.sort((a, b) => moment(a.split(' ')[1] + ' ' + a.split(' ')[2], 'YYYY/MM/DD HH:mm') - moment(b.split(' ')[1] + ' ' + b.split(' ')[2], 'YYYY/MM/DD HH:mm'));
-  future.sort((a, b) => moment(a.split(' ')[1] + ' ' + a.split(' ')[2], 'YYYY/MM/DD HH:mm') - moment(b.split(' ')[1] + ' ' + b.split(' ')[2], 'YYYY/MM/DD HH:mm'));
+  const sortByTime = (a, b) => a.time - b.time;
 
-  today.forEach(event => {
+  today.sort(sortByTime);
+  thisWeek.sort(sortByTime);
+  thisMonth.sort(sortByTime);
+  future.sort(sortByTime);
+
+  today.forEach(item => {
     const listItem = document.createElement('li');
-    listItem.textContent = event;
+    listItem.textContent = item.event;
     todayEventList.appendChild(listItem);
   });
 
-  thisWeek.forEach(event => {
+  thisWeek.forEach(item => {
     const listItem = document.createElement('li');
-    listItem.textContent = event;
+    listItem.textContent = item.event;
     weekEventList.appendChild(listItem);
   });
 
-  thisMonth.forEach(event => {
+  thisMonth.forEach(item => {
     const listItem = document.createElement('li');
-    listItem.textContent = event;
+    listItem.textContent = item.event;
     monthEventList.appendChild(listItem);
   });
 
-  future.forEach(event => {
+  future.forEach(item => {
     const listItem = document.createElement('li');
-    listItem.textContent = event;
+    listItem.textContent = item.event;
     futureEventList.appendChild(listItem);
   });
 }
@@ -136,4 +138,14 @@ function sendNotification(event) {
   new Notification('予定表の通知', notificationOptions);
 }
 
-function request
+function requestNotificationPermission() {
+  if ('Notification' in window) {
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+      }
+    });
+  }
+}
+
+requestNotificationPermission();
