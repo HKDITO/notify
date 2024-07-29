@@ -57,12 +57,11 @@ function displayEvents(events) {
   eventList.innerHTML = ''; // 既存のイベントをクリア
   events.forEach(event => {
     const listItem = document.createElement('li');
-    const start = new Date(event.start.dateTime);
-    const end = new Date(event.end.dateTime);
+    const start = moment.tz(event.start.dateTime, event.start.timeZone || 'UTC').tz('Asia/Tokyo');
+    const end = moment.tz(event.end.dateTime, event.end.timeZone || 'UTC').tz('Asia/Tokyo');
     
-    // ローカルタイムゾーンでの日時をフォーマット
-    const formattedStart = start.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
-    const formattedEnd = end.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    const formattedStart = start.format('YYYY/MM/DD HH:mm');
+    const formattedEnd = end.format('YYYY/MM/DD HH:mm');
 
     listItem.textContent = `${event.subject} - ${formattedStart} - ${formattedEnd}`;
     eventList.appendChild(listItem);
@@ -71,8 +70,8 @@ function displayEvents(events) {
 
 function scheduleNotifications(events) {
   events.forEach(event => {
-    const eventTime = new Date(event.start.dateTime).getTime();
-    const now = new Date().getTime();
+    const eventTime = moment.tz(event.start.dateTime, event.start.timeZone || 'UTC').tz('Asia/Tokyo').valueOf();
+    const now = moment().valueOf();
     const delay = eventTime - now - (10 * 60 * 1000); // 10分前に通知
 
     if (delay > 0) {
