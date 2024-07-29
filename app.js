@@ -143,25 +143,9 @@ function requestNotificationPermission() {
     Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
         console.log('Notification permission granted.');
-      } else {
-        console.log('Notification permission denied.');
       }
     });
-  } else {
-    console.log('This browser does not support notifications.');
   }
 }
 
-// 初期ロード時に通知権限をリクエスト
 requestNotificationPermission();
-
-// テスト通知のスケジュール
-if (Notification.permission === 'granted') {
-  scheduleTestNotification();
-}
-
-function scheduleTestNotification() {
-  setTimeout(() => {
-    sendNotification({ subject: 'テスト通知' });
-  }, 5000); // 5秒後に通知
-}
