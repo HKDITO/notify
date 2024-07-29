@@ -57,7 +57,12 @@ function displayEvents(events) {
   eventList.innerHTML = ''; // 既存のイベントをクリア
   events.forEach(event => {
     const listItem = document.createElement('li');
-    listItem.textContent = `${event.subject} - ${new Date(event.start.dateTime).toLocaleString()}`;
+    const start = new Date(event.start.dateTime);
+    const end = new Date(event.end.dateTime);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+    const formattedStart = start.toLocaleString('ja-JP', options);
+    const formattedEnd = end.toLocaleString('ja-JP', options);
+    listItem.textContent = `${event.subject} - ${formattedStart} - ${formattedEnd}`;
     eventList.appendChild(listItem);
   });
 }
