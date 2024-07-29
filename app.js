@@ -66,7 +66,7 @@ function displayEvents(events) {
 
     const organizer = event.organizer && event.organizer.emailAddress ? event.organizer.emailAddress.name : 'Unknown';
     
-    const formattedEvent = `【専任者】${organizer}   ${formattedDate} ${formattedStartTime} - ${formattedEndTime}`;
+    const formattedEvent = `${event.subject} ${formattedDate} ${formattedStartTime} - ${formattedEndTime} 【専任者】${organizer}`;
     
     listItem.textContent = formattedEvent;
     eventList.appendChild(listItem);
