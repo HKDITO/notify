@@ -123,9 +123,12 @@ function scheduleNotifications(events) {
     const eventTime = moment.tz(event.start.dateTime, event.start.timeZone || 'UTC').tz('Asia/Tokyo').valueOf();
     const now = moment().valueOf();
     const delay = eventTime - now - (10 * 60 * 1000); // 10分前に通知
+    console.log(`Scheduling notification for event: ${event.subject}, Delay: ${delay}ms`);
 
     if (delay > 0) {
       setTimeout(() => sendNotification(event), delay);
+    } else {
+      console.log(`Skipping notification for event: ${event.subject}, Delay: ${delay}ms`);
     }
   });
 }
@@ -143,6 +146,8 @@ function requestNotificationPermission() {
     Notification.requestPermission().then((permission) => {
       if (permission === 'granted') {
         console.log('Notification permission granted.');
+      } else {
+        console.log('Notification permission denied.');
       }
     });
   }
