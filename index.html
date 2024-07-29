@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlook Calendar Notifications</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.png"> <!-- faviconの設定 -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(registration => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(error => {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+  </script>
+</head>
+<body>
+  <h1>Outlook Calendar Notifications</h1>
+  <button onclick="getAuthToken()">サインインして予定表を取得</button>
+  <script src="app.js"></script>
+</body>
+</html>
