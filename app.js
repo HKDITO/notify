@@ -60,13 +60,13 @@ function displayEvents(events) {
     const start = moment.tz(event.start.dateTime, event.start.timeZone || 'UTC').tz('Asia/Tokyo');
     const end = moment.tz(event.end.dateTime, event.end.timeZone || 'UTC').tz('Asia/Tokyo');
     
-    const formattedStartDate = start.format('YYYY/MM/DD');
+    const formattedDate = start.format('YYYY/MM/DD');
     const formattedStartTime = start.format('HH:mm');
     const formattedEndTime = end.format('HH:mm');
 
     const organizer = event.organizer && event.organizer.emailAddress ? event.organizer.emailAddress.name : 'Unknown';
     
-    const formattedEvent = `【専任者】${organizer}   ${formattedStartDate} ${formattedStartTime} - ${formattedEndTime}`;
+    const formattedEvent = `【専任者】${organizer}   ${formattedDate} ${formattedStartTime} - ${formattedEndTime}`;
     
     listItem.textContent = formattedEvent;
     eventList.appendChild(listItem);
