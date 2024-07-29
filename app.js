@@ -3,22 +3,30 @@ const redirectUri = 'https://hkdito.github.io/pwa-outlook-notifications/'; // Gi
 const scopes = 'openid profile User.Read Calendars.Read';
 
 function getAuthToken() {
+  console.log("Redirecting to auth URL");
   const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=token&redirect_uri=${redirectUri}&scope=${scopes}`;
   window.location.href = authUrl;
 }
 
 function getTokenFromUrl() {
   const hash = window.location.hash;
+  console.log("Hash:", hash);
   const params = new URLSearchParams(hash.replace('#', '?'));
-  return params.get('access_token');
+  const token = params.get('access_token');
+  console.log("Access Token:", token);
+  return token;
 }
 
 const token = getTokenFromUrl();
 if (token) {
+  console.log("Token found, fetching calendar events...");
   getCalendarEvents(token);
+} else {
+  console.log("No token found.");
 }
 
 function getCalendarEvents(token) {
+  console.log("Fetching calendar events with token:", token);
   fetch('https://graph.microsoft.com/v1.0/me/events', {
     headers: {
       Authorization: `Bearer ${token}`
@@ -26,8 +34,11 @@ function getCalendarEvents(token) {
   })
   .then(response => response.json())
   .then(data => {
-    console.log(data);
+    console.log("Events data:", data);
     scheduleNotifications(data.value);
+  })
+  .catch(error => {
+    console.error("Error fetching events:", error);
   });
 }
 
@@ -60,3 +71,5 @@ function requestNotificationPermission() {
     });
   }
 }
+
+requestNotificationPermission();
