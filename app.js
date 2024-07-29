@@ -60,7 +60,7 @@ function displayEvents(events) {
     const start = new Date(event.start.dateTime);
     const end = new Date(event.end.dateTime);
     
-    // タイムゾーンを設定してローカルタイムに変換
+    // ローカルタイムゾーンでの日時をフォーマット
     const formattedStart = start.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
     const formattedEnd = end.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
 
