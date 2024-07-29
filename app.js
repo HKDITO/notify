@@ -122,7 +122,7 @@ function scheduleNotifications(events) {
   events.forEach(event => {
     const eventTime = moment.tz(event.start.dateTime, event.start.timeZone || 'UTC').tz('Asia/Tokyo').valueOf();
     const now = moment().valueOf();
-    const delay = eventTime - now - (10 * 60 * 1000); // 10分前に通知
+    const delay = 0 // 10分前に通知
     console.log(`Scheduling notification for event: ${event.subject}, Delay: ${delay}ms`);
 
     if (delay > 0) {
