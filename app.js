@@ -59,9 +59,8 @@ function displayEvents(events) {
     const listItem = document.createElement('li');
     const start = new Date(event.start.dateTime);
     const end = new Date(event.end.dateTime);
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-    const formattedStart = start.toLocaleString('ja-JP', options);
-    const formattedEnd = end.toLocaleString('ja-JP', options);
+    const formattedStart = `${start.getFullYear()}年${('0' + (start.getMonth() + 1)).slice(-2)}月${('0' + start.getDate()).slice(-2)}日 ${('0' + start.getHours()).slice(-2)}:${('0' + start.getMinutes()).slice(-2)}`;
+    const formattedEnd = `${end.getFullYear()}年${('0' + (end.getMonth() + 1)).slice(-2)}月${('0' + end.getDate()).slice(-2)}日 ${('0' + end.getHours()).slice(-2)}:${('0' + end.getMinutes()).slice(-2)}`;
     listItem.textContent = `${event.subject} - ${formattedStart} - ${formattedEnd}`;
     eventList.appendChild(listItem);
   });
