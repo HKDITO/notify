@@ -1,5 +1,5 @@
 const clientId = '62e3748b-2ee5-4c05-92d5-5c4316ed2acf'; // Azureポータルで取得したクライアントIDを入力
-const redirectUri = 'https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPOSITORY_NAME'; // GitHub PagesのURLを設定
+const redirectUri = 'https://hkdito.github.io/pwa-outlook-notifications/'; // GitHub PagesのURLを設定
 const scopes = 'openid profile User.Read Calendars.Read';
 
 function getAuthToken() {
