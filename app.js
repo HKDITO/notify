@@ -1,5 +1,5 @@
-const clientId = '62e3748b-2ee5-4c05-92d5-5c4316ed2acf'; // Azureポータルで取得したクライアントIDを入力
-const redirectUri = 'https://hkdito.github.io/pwa-outlook-notifications/'; // GitHub PagesのURLを設定
+const clientId = '62e3748b-2ee5-4c05-92d5-5c4316ed2acf'; // Azureポータルで取得したクライアントID
+const redirectUri = 'https://hkdito.github.io/pwa-outlook-notifications/'; // GitHub PagesのURL
 const scopes = 'openid profile User.Read Calendars.Read';
 
 function getAuthToken() {
@@ -40,10 +40,25 @@ function getCalendarEvents(token) {
   })
   .then(data => {
     console.log("Events data:", data);
-    scheduleNotifications(data.value);
+    if (data && data.value) {
+      displayEvents(data.value);
+      scheduleNotifications(data.value);
+    } else {
+      console.log("No events found.");
+    }
   })
   .catch(error => {
     console.error("Error fetching events:", error);
+  });
+}
+
+function displayEvents(events) {
+  const eventList = document.getElementById('eventList');
+  eventList.innerHTML = ''; // 既存のイベントをクリア
+  events.forEach(event => {
+    const listItem = document.createElement('li');
+    listItem.textContent = `${event.subject} - ${new Date(event.start.dateTime).toLocaleString()}`;
+    eventList.appendChild(listItem);
   });
 }
 
